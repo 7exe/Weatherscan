@@ -3558,12 +3558,14 @@ flex-direction: row;
 .info-slide-content.teetime {
   flex-direction: row
 }
+
 .info-slide-content.teetime .thing {
   height: 35px;
   width: 100%;
   position: absolute;
   top: 70px;
 }
+
 .info-slide-content.teetime .thing .thingbg {
   position: absolute;
   right: 0;
@@ -3575,6 +3577,7 @@ flex-direction: row;
   -webkit-mask-position: -72px -329px;
   -webkit-mask-size: 1065px 1164px;
 }
+
 .info-slide-content.teetime .frost-pane {
   background-position: -72px -364px;
   max-height: 411.25px;
@@ -3583,11 +3586,13 @@ flex-direction: row;
   flex-direction: row;
   transform: translate(0px, 45px);
 }
+
 .info-slide-content.teetime .hour {
   width: 110px;
   align-items: center;
   margin-right: 44px;
 }
+
 .info-slide-content.teetime .hour.v {
   margin-right: 100px;
 }
@@ -3597,6 +3602,7 @@ flex-direction: row;
   width: 120px;
   transform: translate(0px, -35px);
 }
+
 .info-slide-content.teetime .hour .hourlabel .thingtext {
   color: #fff;
   font-family: Frutiger;
@@ -3604,11 +3610,12 @@ flex-direction: row;
   width: 120px;
   height: 100%;
   text-shadow: #000 1px 1px 3px;
-  transform: translate(0px, 0px) scale(105.5%,100%);
+  transform: translate(0px, 0px) scale(105.5%, 100%);
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .info-slide-content.teetime .daylabel {
   color: #fff;
   font-family: Frutiger;
@@ -3617,9 +3624,10 @@ flex-direction: row;
   top: 5px;
   position: absolute;
   text-shadow: #000 1px 1px 3px;
-  transform: translate(0px, 2.5px) scale(107%,100%);
+  transform: translate(0px, 2.5px) scale(107%, 100%);
   text-align: center;
 }
+
 .info-slide-content.teetime .tempbar {
   position: absolute;
   width: 120px;
@@ -3628,6 +3636,7 @@ flex-direction: row;
   background: linear-gradient(to top, #fffe21 0, #db5a14 100%);
   bottom: 17.5px
 }
+
 .info-slide-content.teetime .icon {
   width: 114px;
   height: 114px;
@@ -3639,6 +3648,7 @@ flex-direction: row;
   position: absolute;
   top: 38px
 }
+
 .info-slide-content.teetime .tempbar .temp {
   color: #fff;
   font-family: Frutiger;
@@ -3650,8 +3660,9 @@ flex-direction: row;
   text-align: center;
   transform: translate(0px, 15px);
   opacity: 1;
-  transform: scale(101%,100%);
+  transform: scale(101%, 100%);
 }
+
 .info-slide-content.teetime .tempbar .wind {
   color: #24346f;
   position: absolute;
@@ -3663,8 +3674,9 @@ flex-direction: row;
   text-align: center;
   bottom: 2.5px;
   opacity: 1;
-  transform: scale(104.5%,100%);
+  transform: scale(104.5%, 100%);
 }
+
 .info-slide-content.golfforecast .thing {
   height: 35px;
   width: 100%;
@@ -3672,6 +3684,7 @@ flex-direction: row;
   top: 70px;
   z-index: 388687;
 }
+
 .info-slide-content.golfforecast .thing .thingbg {
   position: absolute;
   right: 0;
@@ -3683,6 +3696,7 @@ flex-direction: row;
   -webkit-mask-position: -72px -329px;
   -webkit-mask-size: 1065px 1164px;
 }
+
 .info-slide-content.golfforecast .thing .thingtext {
   height: 35px;
   width: 100%;
@@ -3692,28 +3706,33 @@ flex-direction: row;
   padding-top: 5px;
   padding-left: 57px;
   text-shadow: 2px 2px 4px #000;
-  transform: scale(105%,100%);
+  transform: scale(105%, 100%);
   transform-origin: left;
 }
+
 .info-slide-content.golfforecast .frost-pane {
   max-height: 411.25px;
   transform: translate(0px, 45px);
   margin-left: 7px;
 }
+
 .info-slide-content.golfforecast .frost-pane.left {
   margin-left: 0px;
   max-width: 33%;
   padding-left: 31px;
   background-position: -72px -364px;
 }
+
 .info-slide-content.golfforecast .frost-pane.mid {
   max-width: 29.5%;
   background-position: -371px -364px;
 }
+
 .info-slide-content.golfforecast .frost-pane.right {
   width: 40%;
   background-position: -639px -364px;
 }
+
 .info-slide-content.golfforecast .frost-pane.left .purplefooter {
   width: 100%;
   position: absolute;
@@ -3721,6 +3740,7 @@ flex-direction: row;
   height: 122.5px;
   background: linear-gradient(to right, rgba(42, 58, 138, 0) 0, rgba(42, 58, 138, .281) 100%)
 }
+
 .info-slide-content.golfforecast .frost-pane.mid .purplefooter {
   width: 100%;
   position: absolute;
@@ -3728,6 +3748,7 @@ flex-direction: row;
   height: 122.5px;
   background: linear-gradient(to right, rgba(42, 58, 138, .287) 0, rgba(42, 58, 138, .534) 100%)
 }
+
 .info-slide-content.golfforecast .frost-pane.right .purplefooter {
   width: 100%;
   position: absolute;
@@ -3735,11 +3756,13 @@ flex-direction: row;
   height: 122.5px;
   background: linear-gradient(to right, rgba(42, 58, 138, .636) 0, rgba(42, 58, 138, .85) 100%)
 }
+
 .info-slide-content.golfforecast .forecontainer {
   position: absolute;
   width: 261px;
   height: 100%;
 }
+
 .info-slide-content.golfforecast .day {
   width: 100%;
   position: absolute;
@@ -3747,9 +3770,10 @@ flex-direction: row;
   font-family: Frutiger;
   color: #d8c422;
   font-size: 30px;
-  transform: scale(105%,100%);
+  transform: scale(105%, 100%);
   top: 14px;
 }
+
 .info-slide-content.golfforecast .icon {
   width: 179px;
   height: 179px;
@@ -3760,22 +3784,25 @@ flex-direction: row;
   top: 36px;
   left: -8px;
 }
+
 .info-slide-content.golfforecast .forecontainer .high {
   position: absolute;
   font-family: Frutiger;
   font-size: 61px;
   top: 65px;
   left: 165px;
-  transform: scale(101%,100%);
+  transform: scale(101%, 100%);
 }
+
 .info-slide-content.golfforecast .low {
   position: absolute;
   font-family: Frutiger;
   font-size: 61px;
   top: 134px;
   left: 165px;
-  transform: scale(101%,100%);
+  transform: scale(101%, 100%);
 }
+
 .info-slide-content.golfforecast .wind {
   position: absolute;
   font-family: Frutiger;
@@ -3783,19 +3810,21 @@ flex-direction: row;
   text-align: center;
   width: 100%;
   top: 245px;
-  transform: scale(105%,100%);
+  transform: scale(105%, 100%);
 }
+
 .info-slide-content.golfforecast .golfindex {
   width: 100%;
   position: absolute;
   font-family: Frutiger;
   color: #d8c422;
   font-size: 29.5px;
-  transform: scale(105.5%,100%);
+  transform: scale(105.5%, 100%);
   transform-origin: left;
   top: 305px;
   left: -8px;
 }
+
 .info-slide-content.golfforecast .bar {
   height: 25px;
   width: 205px;
@@ -3804,6 +3833,7 @@ flex-direction: row;
   right: 25px;
   background: linear-gradient(to right, #59523c 2%, #9b8c33 20%, #ccca36 40%, #9fbc44 60%, #4ba824 80%, #49844d 99%);
 }
+
 .info-slide-content.golfforecast .bar .bararrow {
   position: absolute;
   bottom: -5px;
@@ -3816,6 +3846,7 @@ flex-direction: row;
   -webkit-filter: drop-shadow(4px 0 4px rgba(0, 0, 0, .75));
   filter: drop-shadow(4px 0 4px rgba(0, 0, 0, .75));
 }
+
 .info-slide-content.golfforecast .bar .bararrowtext {
   font-family: Frutiger;
   font-size: 30px;
@@ -3826,8 +3857,9 @@ flex-direction: row;
   left: -79px;
   width: 150px;
   text-align: center;
-  transform: scale(105%,100%);
+  transform: scale(105%, 100%);
 }
+
 .info-slide-content.golfmoreinfoimage .frost-pane {
   background-color: rgba(0, 0, 0, 0);
   background: url(/images/newbg/golf_promo.png);
@@ -3835,16 +3867,18 @@ flex-direction: row;
   background-position: -19px 0;
   background-size: 958px 446px;
 }
+
 .info-slide-content.golfmoreinfoimage .frost-pane .moreinfotext {
   font-size: 33px;
   line-height: 202%;
   text-align: right;
-  transform: scale(110%,100%);
+  transform: scale(110%, 100%);
   transform-origin: right;
   position: absolute;
   top: 25px;
   right: 55px;
 }
+
 .info-slide-content.gardenindex .thing {
   color: #fff;
   font-family: Frutiger;
@@ -5382,37 +5416,46 @@ label{
   opacity: .3;
 }
 .golf-slide-intro {
-  background: transparent url(/images/newbg/boatbeach_intro_bg.png) no-repeat bottom;
+  background: transparent url(/images/newbg/golf_intro_bg.png) no-repeat bottom;
   background-size: 1068px 788px;
   background-position: -127px -112px;
 }
+
 .golf-slide-intro .accent.i {
   background-color: #218912;
 }
+
 .golf-slide-intro .accent.ii {
   background-color: #8dcd5a;
   opacity: 100%;
 }
+
 .golf-slide-intro .accent.iii {
   background-color: #145b23;
 }
+
 .golf-slide-intro .accent.iv {
   background-color: #12780d;
   opacity: .3;
 }
+
 .golf-slide-intro .accent.v {
   background-color: #145b23;
 }
+
 .golf-slide-intro .accent.vi {
   background-color: #2d7816;
 }
+
 .golf-slide-intro .accentvii {
   background-color: #137f0d;
 }
+
 .golf-slide-intro .accent.viii {
   background-color: #8dcd5a;
   opacity: 100%;
 }
+
 .golf-slide-intro .accent.ix {
   background-color: #12780d;
   opacity: .3;

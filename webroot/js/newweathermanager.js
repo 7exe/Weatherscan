@@ -53,6 +53,74 @@ function applyApperanceSettings() {
   }
 
 }
+const googlePlacesUrl = `https://places.googleapis.com/v1/places:searchNearby?key=${apiKeyGoogle}`;
+async function getNearbyGolfCourses() {
+  try {
+    // Prepare the request body for POST
+    const requestBody = {
+      maxResultCount: 7,
+      locationRestriction: {
+        circle: {
+          center: {
+            latitude: maincitycoords.lat,
+            longitude: maincitycoords.lon,
+          },
+          radius: 20000,
+        },
+      },
+      includedTypes: ["golf_course"],
+      excludedTypes: ["stadium"],
+    };
+
+    // Make a POST request to the Google Places API
+    const response = await fetch(googlePlacesUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-FieldMask": "places.location,places.displayName,places.types",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    var data = await response.json();
+
+    if (data.places && data.places.length > 0) {
+      // Get the 2nd, 3rd, and 4th golf courses
+      const golfCourses = data.places
+        .filter(
+          (item) =>
+            !item.displayName.text.includes("Indoor") &&
+            !item.displayName.text.includes("Topgolf")
+        )
+        .slice(0, 3)
+        .map((course) => ({
+          name: course.displayName.text,
+          lat: course.location.latitude,
+          lon: course.location.longitude,
+        }));
+
+      console.log(golfCourses);
+      return golfCourses;
+    } else {
+      console.log("No golf courses found.");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching golf courses:", error);
+  }
+}
+
+async function getGolfCourses(callback) {
+  var data;
+  if(autoFindGolfLocations){
+    data = await getNearbyGolfCourses();
+  }else{
+    data = golfLocations;
+  }
+  weatherInfo.golfReport.locations = data;
+  callback();
+}
+
 
 $(function(){
   Intro()
@@ -91,7 +159,10 @@ function getMainLoc(configFailed) {
       getStatePopularCities(state, true)
       grabalmanacSlidesData()
       grabHealthData()
+      grabGardenData()
       grabSideandLowerBarData()
+      getGolfCourses(grabGolfData);
+
     });
   } else if (locationSettings.mainLocation.searchQuery.type && configFailed != true) {
     if (locationSettings.mainLocation.searchQuery.type == "geocode") {
@@ -107,7 +178,10 @@ function getMainLoc(configFailed) {
         getStatePopularCities(state, true)
         grabalmanacSlidesData()
         grabHealthData()
+        grabGardenData()
         grabSideandLowerBarData()
+        getGolfCourses(grabGolfData);
+
       });
     } else {
       $.getJSON("https://api.weather.com/v3/location/search?query="+locationSettings.mainLocation.searchQuery.val+"&locationType="+locationSettings.mainLocation.searchQuery.type+"&fuzzyMatch="+locationSettings.mainLocation.searchQuery.fuzzy+((locationSettings.mainLocation.searchQuery.country) ? "&countryCode="+locationSettings.mainLocation.searchQuery.country : "")+((locationSettings.mainLocation.searchQuery.state) ? "&adminDistrictCode="+locationSettings.mainLocation.searchQuery.state : "")+"&language=en-US&format=json&apiKey=" + api_key, function(data) {
@@ -123,7 +197,10 @@ function getMainLoc(configFailed) {
           getStatePopularCities(state, true)
           grabalmanacSlidesData()
           grabHealthData()
+          grabGardenData()
           grabSideandLowerBarData()
+          getGolfCourses(grabGolfData);
+
       });
     }
   } else {
@@ -140,7 +217,9 @@ function getMainLoc(configFailed) {
       getStatePopularCities(state, true)
       grabalmanacSlidesData()
       grabHealthData()
+      grabGardenData()
       grabSideandLowerBarData()
+      getGolfCourses(grabGolfData);
     });
 
   }
@@ -334,7 +413,13 @@ var weatherInfo = { currentCond: {
       {name:"",cond:"",icon:"",high:"",low:"",windspeed:""}
     ]},*/
     weatherLocs:[]
-  }, almanac: {noReport:false,displayname:"",date:"",avghigh:"",avglow:"",rechigh:"",reclow:"",rechighyear:"",reclowyear:"",sunrise:"",sunset:"",moonphases:[
+  }, golfReport: {
+    locations: [],
+  },gardenReport: {
+    watering_need_index: 0,
+    watering_need_category: "",
+    cloudCover: "",
+  },almanac: {noReport:false,displayname:"",date:"",avghigh:"",avglow:"",rechigh:"",reclow:"",rechighyear:"",reclowyear:"",sunrise:"",sunset:"",moonphases:[
     {name:"NEW",date:"Feb 10"},
     {name:"FIRST",date:"Feb 16"},
     {name:"FULL",date:"Feb 21"},
@@ -1004,6 +1089,269 @@ function grabalmanacSlidesData() {
       })
     }
 }
+
+// Originally this branch auto-found the timezome, which you can see parts of here
+const getTimeInTimezone = (timeZone) => {
+  // Get the current date and time in the specified timezone
+  //const dateInTimezone = new Date().toLocaleString("en-US", { timeZone });
+
+  // Create a new Date object from the localized string
+  //return new Date(dateInTimezone);
+  return new Date();
+};
+
+function processTimeLabels(timeLabels, master_timezone) {
+  const removedIndexes = [];
+
+  // Step 1: Filter out "night" entries and track their indexes
+  const filteredLabels = timeLabels.filter((label, index) => {
+    if (label == null) {
+      removedIndexes.push(index);
+      return false;
+    } // Sometimes past times will be turned into null for some reason
+    if (label.toLowerCase().includes("night")) {
+      removedIndexes.push(index); // Keep track of removed index
+      return false; // Exclude this item from filteredLabels
+    }
+    return true; // Keep this item
+  });
+
+  // Step 2: Determine the current day in the provided timezone
+  const now = getTimeInTimezone();
+  const options = { weekday: "long" };
+  const dayFormatter = new Intl.DateTimeFormat("en-US", options);
+
+  function getFormattedDay(date) {
+    // Create a new Date object for the specified date
+    const dateInNY = new Date(
+      date.toLocaleString("en-US")
+    );
+    const dayFormatter = new Intl.DateTimeFormat("en-US", options);
+    return dayFormatter.format(dateInNY);
+  }
+
+  // Step 3: Define a function to add days to a date
+  const addDays = (date, days) => {
+    let result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  };
+
+  // Step 4: Map labels to their respective weekday names
+  var arbitrary_offset = 0;
+  const dayNames = filteredLabels.map((label, index) => {
+    //console.log("GOLF PARSED DATA", label, index)
+    let dayOffset;
+
+    // Define the offset based on the label
+    switch (label.toLowerCase()) {
+      case "today":
+        dayOffset = 0;
+        break;
+      case "tomorrow":
+        dayOffset = 1;
+        arbitrary_offset = 1;
+        break;
+      case "tonight":
+        dayOffset = 0;
+        break;
+      default:
+        dayOffset = index + arbitrary_offset; // ???? Why is +1 needed here?? It creates duplicates in this context: Input: "Tomorrow Sunday Monday" -> "Saturday Saturday Sunday"; (But works fine when its today?)
+        // Will look into deeper later, for now it is fixed via "arbitrary_offset" lol, might have smth to do with starting off at tomorrow, is +1, which means everything after is also +1 but idk
+        break;
+    }
+
+    // Calculate the actual day name based on the offset
+    function getFutureDayName(timeOffsetDays, master_timezone) {
+      // Get the current date and time in New York time zone
+      const currentDate = new Date();
+      const options = {  };
+
+      // Get New York date and time offset
+      const newYorkDate = new Date(new Date().toLocaleString("en-US", options));
+
+      // Add timeOffsetDays to New York date
+      newYorkDate.setDate(newYorkDate.getDate() + timeOffsetDays);
+
+      // Get the day name of the new date
+      const dayName = newYorkDate.toLocaleDateString("en-US", {
+        weekday: "long",
+      });
+
+      return dayName;
+    }
+    const targetDate = getFutureDayName(dayOffset, "");
+    //console.log("GOLF day", dayFormatter.format(now), dayFormatter.format(targetDate), label, dayOffset);
+    return targetDate;
+  });
+
+  // Return both the processed day names and the indexes of removed items
+  return { dayNames, removedIndexes };
+}
+
+function grabGardenData() {
+  $.getJSON(
+    "https://api.weather.com/v2/indices/wateringNeeds/daypart/3day?geocode=" +
+      maincitycoords.lat +
+      "," +
+      maincitycoords.lon +
+      "&format=json&language=en-US&apiKey=" +
+      api_key,
+    function (data) {
+      console.log("GARDEN DATA", data);
+      weatherInfo.gardenReport.watering_need_index =
+        data.wateringNeedsIndex12hour.wateringNeedsIndex[0];
+      weatherInfo.gardenReport.watering_need_category =
+        data.wateringNeedsIndex12hour.wateringNeedsCategory[0];
+    }
+  );
+}
+function grabGolfData() {
+  weatherInfo.golfReport.locations.forEach((location) => {
+    location.weather = {
+      golfIndex: {},
+      forecastData: {
+        threeDay: {},
+        hourlyReport: {},
+      },
+    };
+
+    $.getJSON(
+      `https://api.weather.com/v2/indices/golf/daypart/15day?geocode=${location.lat},${location.lon}&language=en-US&format=json&apiKey=${api_key}`,
+      function (data) {
+        data = data.golfIndex12hour;
+        const processed_time_labels = processTimeLabels(
+          data.daypartName,
+          ""
+        );
+        location.weather.golfIndex.timeLabels = processed_time_labels.dayNames;
+
+        const golf_categories = data.golfCategory.filter(
+          (_, index) => !processed_time_labels.removedIndexes.includes(index)
+        );
+        const golf_index = data.golfIndex.filter(
+          (_, index) => !processed_time_labels.removedIndexes.includes(index)
+        );
+
+        location.weather.golfIndex.golfCategories = golf_categories;
+        location.weather.golfIndex.golfIndex = golf_index;
+      }
+    );
+
+    $.getJSON(
+      `https://api.weather.com/v3/wx/forecast/daily/3day?geocode=${location.lat},${location.lon}&format=json&units=e&language=en-US&apiKey=${api_key}`,
+      function (data) {
+        dataTemp = data;
+        data = data.daypart[0];
+        const processed_time_labels = processTimeLabels(
+          data.daypartName,
+          ""
+        );
+        location.weather.forecastData.threeDay.timeLabels =
+          processed_time_labels.dayNames;
+        location.weather.forecastData.threeDay.icon = data.iconCode
+          .filter(
+            (_, index) => !processed_time_labels.removedIndexes.includes(index)
+          )
+          .filter((item) => item !== null);
+        location.weather.forecastData.threeDay.windDirectionCardinal =
+          data.windDirectionCardinal
+            .filter(
+              (_, index) =>
+                !processed_time_labels.removedIndexes.includes(index)
+            )
+            .filter((item) => item !== null);
+        location.weather.forecastData.threeDay.windSpeed = data.windSpeed
+          .filter(
+            (_, index) => !processed_time_labels.removedIndexes.includes(index)
+          )
+          .filter((item) => item !== null);
+        location.weather.forecastData.threeDay.tempMax =
+          dataTemp.calendarDayTemperatureMax
+            .filter(
+              (_, index) =>
+                !processed_time_labels.removedIndexes.includes(index)
+            )
+            .filter((item) => item !== null);
+        location.weather.forecastData.threeDay.tempMin =
+          dataTemp.calendarDayTemperatureMin
+            .filter(
+              (_, index) =>
+                !processed_time_labels.removedIndexes.includes(index)
+            )
+            .filter((item) => item !== null);
+      }
+    );
+
+    $.getJSON(
+      `https://api.weather.com/v3/wx/forecast/hourly/2day?geocode=${location.lat},${location.lon}&format=json&units=e&language=en-US&apiKey=${api_key}`,
+      function (data) {
+        function buildHourlyTimeTitle(time) {
+          var hour = dateFns.getHours(time);
+          if (hour === 0) {
+            return "Midnight";
+          } else if (hour === 12) {
+            return "Noon";
+          }
+          return dateFns.format(time, "h a").replace(" ", "");
+        }
+
+        const removedIndexes = [];
+        location.weather.forecastData.hourlyReport.dayLabels = [];
+
+        location.weather.forecastData.hourlyReport.hourLabels =
+          data.validTimeLocal
+            .map((time, index) => {
+              const dayName = new Date(time).toLocaleString("en-US", {
+                weekday: "short",
+              });
+              const hour = dateFns.getHours(time);
+
+              // Check if the hour is divisible by 2
+              if (hour % 2 === 0) {
+                location.weather.forecastData.hourlyReport.dayLabels.push(
+                  dayName
+                );
+                return buildHourlyTimeTitle(time);
+              } else {
+                // If not divisible by 2, add index to removed_indexes
+                removedIndexes.push(index);
+                return null;
+              }
+            })
+            .filter(Boolean)
+            .splice(0, 5);
+
+        /*location.weather.forecastData.hourlyReport.dayLabels =
+          data.dayOfWeek.filter(
+            (_, index) => !removedIndexes.includes(index)
+          ).splice(0, 5);*/ // Isnt accurate for some reason
+
+        location.weather.forecastData.hourlyReport.dayLabels =
+          location.weather.forecastData.hourlyReport.dayLabels.splice(0, 5);
+
+        location.weather.forecastData.hourlyReport.temperature =
+          data.temperature
+            .filter((_, index) => !removedIndexes.includes(index))
+            .splice(0, 5);
+
+        location.weather.forecastData.hourlyReport.windSpeed = data.windSpeed
+          .filter((_, index) => !removedIndexes.includes(index))
+          .splice(0, 5);
+
+        location.weather.forecastData.hourlyReport.windDirectionCardinal =
+          data.windDirectionCardinal
+            .filter((_, index) => !removedIndexes.includes(index))
+            .splice(0, 5);
+
+        location.weather.forecastData.hourlyReport.icon = data.iconCode
+          .filter((_, index) => !removedIndexes.includes(index))
+          .splice(0, 5);
+      }
+    );
+  });
+}
+
 function grabHealthData() {
   $.getJSON('https://api.weather.com/v3/wx/forecast/daily/5day?geocode='+ maincitycoords.lat + ',' + maincitycoords.lon +"&format=json&language=en-US&units=e&apiKey=" + api_key, function(data) {
     var healthforecastdata = data
@@ -1021,6 +1369,7 @@ function grabHealthData() {
     weatherInfo.healthforecast.low = healthforecastdata.temperatureMin[starthidxdayonly]
     weatherInfo.healthforecast.precipChance = healthforecastdata.daypart[0].precipChance[starthidx] + '%'
     weatherInfo.healthforecast.humid = healthforecastdata.daypart[0].relativeHumidity[starthidx] + '%'
+    weatherInfo.gardenReport.cloudCover = healthforecastdata.daypart[0].cloudCover[starthidx] + "%";
     weatherInfo.healthforecast.wind = (((healthforecastdata.daypart[0].windDirectionCardinal[starthidx] == "CALM") ? 'calm' :  healthforecastdata.daypart[0].windDirectionCardinal[starthidx]) + ' ' + ((healthforecastdata.daypart[0].windSpeed[starthidx] === 0) ? '' : healthforecastdata.daypart[0].windSpeed[starthidx]))
     weatherInfo.healthforecast.windspeed = healthforecastdata.daypart[0].windSpeed[starthidx]
   });

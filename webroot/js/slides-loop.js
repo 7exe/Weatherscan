@@ -41,6 +41,15 @@ var maindiv = {
 	"beachConditions":".beach-slide",
 	"costalWatersAlerts":".beach-slide",
 	"costalWatersForecast":".beach-slide",
+	 // Garden
+	"gardenIntro": ".garden-slide-intro",
+	"gardenForecast": ".garden",
+	"moreGardenImage": ".garden",
+	// Golf
+	"golfIntro": ".golf-slide-intro",
+	"golfTeeTime": ".golf",
+	"golfForecast": ".golf",
+	"golfMore": ".golf",
 	//Health
 	"healthIntro":".health-slide-intro",
 	"healthForecast":".health",
@@ -92,6 +101,15 @@ var mainDivHeaders = {
 	//International
 	"internationalIntro":"",
 	"internationalForecast":"",
+	//Garden
+	"gardenIntro": "",
+	"gardenForecast": "Gardening Forecast",
+	"moreGardenImage": "*none*",
+	//Golf
+	"golfIntro": "",
+	"golfForecast": "Golf Course Forecast",
+	"golfTeeTime": "Tee Time Forecast",
+	"golfMore": "*none*",
 	//Beach
 	"beachIntro":"",
 	"beachConditions":"Surf Report",
@@ -139,6 +157,15 @@ var mainDivCityHeaders = {
 	//International
 	"internationalIntro":"",
 	"internationalForecast":"*none*",
+	//Garden
+	"gardenIntro": "",
+	"gardenForecast": "*currentConditionsLocation*",
+	"moreGardenImage": "*none*",
+	//Golf
+	"golfIntro": "",
+	"golfForecast": "*none*",
+	"golfTeeTime": "*none*",
+	"golfMore": "*none*",
 	//Beach
 	"beachIntro":"",
 	"beachConditions":"",
@@ -598,7 +625,398 @@ var mainMap
 						});
 					}, slideDelay);
 				}
-			}
+			},
+			// Garden
+			gardenIntro() {
+				$(".garden-slide-intro");
+				$(".garden-slide-intro .accent").fadeIn(500);
+				$(".garden-slide-intro .weatherscanmarquee").fadeIn(500);
+				$(".garden-slide-intro .weatherscanmarquee").css(
+				  "animation",
+				  "marqueeweatherscan 5.5s linear normal forwards"
+				);
+				setTimeout(function () {
+				  $(".garden-slide-intro .segment").fadeIn(500);
+				}, 1000);
+				setTimeout(function () {
+				  $(".garden-slide-intro .segment").fadeOut(500);
+				  $(".garden-slide-intro .accent").fadeOut(500);
+				  $(".garden-slide-intro .weatherscanmarquee")
+					.fadeOut(500)
+					.promise()
+					.done(function () {
+					  wait(0);
+					});
+				}, 5000);
+			  },
+			  gardenForecast: function () {
+				wlength = {
+				  1: "8px",
+				  2: "45px",
+				  3: "85px",
+				  4: "125px",
+				  5: "165px",
+				  6: "205px",
+				  7: "245px",
+				  8: "285px",
+				  9: "326px",
+				  10: "366px",
+				};
+				var text_fix = {
+				  0: "-10px",
+				  1: "-10px",
+				  2: "-50px",
+				  3: "-90px",
+				  4: "-130px",
+				  5: "-170px",
+				  6: "-210px",
+				  7: "-250px",
+				  8: "-290px",
+				  9: "-330px",
+				  10: "-343px",
+				};
+				var wtime = {
+				  1: 0,
+				  2: 200,
+				  3: 400,
+				  4: 600,
+				  5: 800,
+				  6: 1000,
+				  7: 1200,
+				  8: 1400,
+				  9: 1600,
+				  10: 1800,
+				};
+		
+				$(".info-slide-content.gardenindex .bararrow").css("left", "8px");
+				$(".info-slide-content.gardenindex .bararrow .bararrowtext").css(
+				  "left",
+				  text_fix[weatherInfo.gardenReport.watering_need_index]
+				);
+				$(".info-slide-content.gardenindex .bararrow .bararrowtext").fadeOut(0);
+		
+				getCCicon(
+				  ".garden .icon",
+				  weatherInfo.healthforecast.icon,
+				  weatherInfo.healthforecast.windspeed
+				);
+				$(".info-slide-content.gardenindex .bararrow .bararrowtext").text(
+				  weatherInfo.gardenReport.watering_need_category
+				);
+				$(".info-slide-content.gardenindex .precipvalue").text(
+				  weatherInfo.healthforecast.precipChance
+				);
+				$(".info-slide-content.gardenindex .low").text(
+				  weatherInfo.healthforecast.low
+				);
+				$(".info-slide-content.gardenindex .high").text(
+				  weatherInfo.healthforecast.high
+				);
+				$(".info-slide-content.gardenindex .thingtext").text(
+				  weatherInfo.healthforecast.day
+				);
+				$(".info-slide-content.gardenindex .cloudcovervalue").text(
+				  weatherInfo.gardenReport.cloudCover
+				);
+		
+				$(".gardenindex")
+				  .fadeIn(500)
+				  .promise()
+				  .done(function () {
+					$(".info-slide-content.gardenindex .bararrow").animate(
+					  { left: wlength[weatherInfo.gardenReport.watering_need_index] },
+					  wtime[weatherInfo.gardenReport.watering_need_index],
+					  "linear",
+					  function () {
+						$(
+						  ".info-slide-content.gardenindex .bararrow .bararrowtext"
+						).fadeIn(500);
+					  }
+					);
+				  });
+		
+				setTimeout(function () {
+				  $(".gardenindex")
+					.fadeOut(500)
+					.promise()
+					.done(function () {
+					  wait(0);
+					});
+				}, slideDelay);
+			  },
+		
+			  moreGardenImage() {
+				$(".info-slide-content.gardenmoreinfoimage").fadeIn(500);
+				setTimeout(function () {
+				  $(".info-slide-content.gardenmoreinfoimage")
+					.fadeOut(500)
+					.promise()
+					.done(function () {
+					  wait(0);
+					});
+				}, slideDelay);
+			  },
+			// Golf
+			golfIntro() {
+				$(".golf-slide-intro");
+				$(".golf-slide-intro .accent").fadeIn(500);
+				$(".golf-slide-intro .weatherscanmarquee").fadeIn(500);
+				$(".golf-slide-intro .weatherscanmarquee").css(
+				  "animation",
+				  "marqueeweatherscan 5.5s linear normal forwards"
+				);
+				setTimeout(function () {
+				  $(".golf-slide-intro .segment").fadeIn(500);
+				}, 1000);
+				setTimeout(function () {
+				  $(".golf-slide-intro .segment").fadeOut(500);
+				  $(".golf-slide-intro .accent").fadeOut(500);
+				  $(".golf-slide-intro .weatherscanmarquee")
+					.fadeOut(500)
+					.promise()
+					.done(function () {
+					  wait(0);
+					});
+				}, 5000);
+			  },
+			  golfMore() {
+				$(".info-slide-content.golfmoreinfoimage").fadeIn(500);
+				setTimeout(function () {
+				  $(".info-slide-content.golfmoreinfoimage")
+					.fadeOut(500)
+					.promise()
+					.done(function () {
+					  wait(0);
+					});
+				}, slideDelay);
+			  },
+			  golfTeeTime() {
+				const reportData =
+				  weatherInfo.golfReport.locations[0].weather.forecastData.hourlyReport;
+				const locationName = weatherInfo.golfReport.locations[0].name
+				  .replace("Golf Course", "GC")
+				  .replace("Country Club", "");
+		
+				$(".golf .info-subheader #subhead-city").text(locationName);
+		
+				const hourLabels = ["i", "ii", "iii", "iv", "v"];
+				hourLabels.forEach((label, idx) => {
+				  const hourSelector = `.info-slide-content.teetime .frost-pane .hour.${label}`;
+		
+				  $(`${hourSelector} .thingtext`).text(reportData.hourLabels[idx]);
+				  $(`${hourSelector} .daylabel`).text(
+					reportData.dayLabels[idx].slice(0, 3)
+				  );
+				  $(`${hourSelector} .temp`).text(reportData.temperature[idx]);
+				  $(`${hourSelector} .wind`).text(
+					`${reportData.windDirectionCardinal[idx]} ${reportData.windSpeed[idx]}`
+				  );
+				  getCCicon(
+					`${hourSelector} .icon`,
+					reportData.icon[idx],
+					reportData.windSpeed[idx]
+				  );
+				});
+		
+				$(".info-slide-content.teetime .hour .tempbar").css("height", "0px");
+				$(
+				  ".info-slide-content.teetime .hour .tempbar .temp, .info-slide-content.teetime .hour .tempbar .wind"
+				).css("opacity", "0%");
+		
+				$(".info-slide-content.teetime")
+				  .fadeIn(500)
+				  .promise()
+				  .done(() => {
+					const temperatures = reportData.temperature.slice(0, 5);
+					const minTemp = Math.min(...temperatures);
+					const maxTemp = Math.max(...temperatures);
+					const tempRange = maxTemp - minTemp || 0.001;
+					const barHeightRange = 100 - 45;
+		
+					hourLabels.forEach((label, idx) => {
+					  const temp = reportData.temperature[idx];
+					  const heightPercent =
+						((temp - minTemp) / tempRange) * barHeightRange + 78;
+					  const heightPx = (heightPercent / 100) * 165;
+		
+					  $(`.info-slide-content.teetime .hour.${label} .tempbar`).animate(
+						{ height: `${heightPx}px` },
+						1000,
+						"linear",
+						function () {
+						  $(this).find(".temp, .wind").fadeTo("slow", 1);
+						}
+					  );
+					});
+				  });
+		
+				setTimeout(() => {
+				  $(".info-slide-content.teetime")
+					.fadeOut(500)
+					.promise()
+					.done(() => {
+					  wait(0);
+					});
+				}, slideDelay);
+			  },
+			  golfForecast() {
+				function updatePane(paneSelector, locationData, dayIndex) {
+				  $(`${paneSelector} .day`).text(
+					locationData.weather.golfIndex.timeLabels[dayIndex]
+				  );
+				  $(`${paneSelector} .high`).text(
+					locationData.weather.forecastData.threeDay.tempMax[dayIndex]
+				  );
+				  $(`${paneSelector} .low`).text(
+					locationData.weather.forecastData.threeDay.tempMin[dayIndex]
+				  );
+				  $(`${paneSelector} .wind`).text(
+					`${locationData.weather.forecastData.threeDay.windDirectionCardinal[dayIndex]} ${locationData.weather.forecastData.threeDay.windSpeed[dayIndex]}`
+				  );
+				  $(`${paneSelector} .bararrow .bararrowtext`).text(
+					locationData.weather.golfIndex.golfCategories[dayIndex]
+				  );
+		
+				  getCCicon(
+					`${paneSelector} .icon`,
+					locationData.weather.forecastData.threeDay.icon[dayIndex],
+					locationData.weather.forecastData.threeDay.windSpeed[dayIndex]
+				  );
+				}
+		
+				function resetBarArrow(paneSelector) {
+				  $(`${paneSelector} .bararrow`).css("left", "-10px");
+				  $(`${paneSelector} .bararrow .bararrowtext`).fadeOut(0);
+				}
+		
+				function animateBarArrow(paneSelector, golfIndex, durationMultiplier) {
+				  const blength = {
+					0: "-10px",
+					1: "10px",
+					2: "30px",
+					3: "50px",
+					4: "70px",
+					5: "90px",
+					6: "110px",
+					7: "130px",
+					8: "150px",
+					9: "170px",
+					10: "190px",
+				  };
+				  const btime = {
+					0: 0,
+					1: 100,
+					2: 200,
+					3: 300,
+					4: 400,
+					5: 500,
+					6: 600,
+					7: 700,
+					8: 800,
+					9: 900,
+					10: 1000,
+				  };
+		
+				  if(golfIndex >= 9){
+					$(`${paneSelector} .bararrow .bararrowtext`).css("left", "-120px");
+				  }else{
+					$(`${paneSelector} .bararrow .bararrowtext`).css("left", "");
+				  }
+		
+				  $(`${paneSelector} .bararrow`).animate(
+					{ left: blength[golfIndex] },
+					btime[golfIndex] * durationMultiplier,
+					"linear",
+					function () {
+					  $(`${paneSelector} .bararrow .bararrowtext`).fadeIn(500);
+					}
+				  );
+				}
+		
+				function updateAndAnimateLocationForecast(locationData) {
+				  updatePane(
+					".info-slide-content.golfforecast .frost-pane.left",
+					locationData,
+					0
+				  );
+				  updatePane(
+					".info-slide-content.golfforecast .frost-pane.mid",
+					locationData,
+					1
+				  );
+				  updatePane(
+					".info-slide-content.golfforecast .frost-pane.right",
+					locationData,
+					2
+				  );
+		
+				  resetBarArrow(".info-slide-content.golfforecast .frost-pane.left");
+				  resetBarArrow(".info-slide-content.golfforecast .frost-pane.right");
+				  resetBarArrow(".info-slide-content.golfforecast .frost-pane.mid");
+		
+				  $(".info-slide-content.golfforecast")
+					.fadeIn(500)
+					.promise()
+					.done(() => {
+					  animateBarArrow(
+						".info-slide-content.golfforecast .frost-pane.left",
+						locationData.weather.golfIndex.golfIndex[0],
+						2
+					  );
+					  animateBarArrow(
+						".info-slide-content.golfforecast .frost-pane.mid",
+						locationData.weather.golfIndex.golfIndex[1],
+						2
+					  );
+					  animateBarArrow(
+						".info-slide-content.golfforecast .frost-pane.right",
+						locationData.weather.golfIndex.golfIndex[2],
+						2
+					  );
+					});
+				}
+		
+				$(".info-slide-content.golfforecast .thingtext").text(
+				  weatherInfo.golfReport.locations[0].name
+				);
+				updateAndAnimateLocationForecast(weatherInfo.golfReport.locations[0]);
+		
+				setTimeout(() => {
+				  $(".info-slide-content.golfforecast")
+					.fadeOut(500)
+					.promise()
+					.done(() => {
+					  $(".info-slide-content.golfforecast .thingtext").text(
+						weatherInfo.golfReport.locations[1].name
+					  );
+					  updateAndAnimateLocationForecast(
+						weatherInfo.golfReport.locations[1]
+					  );
+		
+					  setTimeout(() => {
+						$(".info-slide-content.golfforecast")
+						  .fadeOut(500)
+						  .promise()
+						  .done(() => {
+							$(".info-slide-content.golfforecast .thingtext").text(
+							  weatherInfo.golfReport.locations[2].name
+							);
+							updateAndAnimateLocationForecast(
+							  weatherInfo.golfReport.locations[2]
+							);
+		
+							// Hide forecast after final location display
+							setTimeout(() => {
+							  $(".golfforecast")
+								.fadeOut(500)
+								.promise()
+								.done(() => wait(0));
+							}, 9000);
+						  });
+					  }, 9000);
+					});
+				}, 9000);
+			  }
 			,almanac() {
 				if (weatherInfo.almanac.noReport == true) {
 					$('.city-info-slide #subhead-city').text(weatherInfo.almanac.displayname);
@@ -1770,6 +2188,7 @@ var mainMap
 				grabTravelData()
 				grabInternationalData()
 				grabAirportDelayData()
+				grabGolfData();
 			}
 			$($cities[0]).removeClass('current');
 			$($cities[moveHeaderVal]).addClass('current');
@@ -1813,12 +2232,13 @@ var mainMap
 				"severe-cities":'<span class="city severe" data-slide="severe" data-divOrder="'+slideVal+ ((loopComplete == true) ? '" data-loopComplete="true"':'"')+' data-locIdx="'+locIdxVal+'" data-repeat="'+repeatVal+'" data-slideDelay="'+slideDelayVal+'"' + `data-slideOrder='${slideOrderVal}'>` + ((locIdxVal == 0) ? maincitycoords.displayname : locList[locIdxVal-1].displayname)+ '</span>',
 				"cities":'<span class="city" data-slide="city" data-divOrder="'+slideVal+ ((loopComplete == true) ? '" data-loopComplete="true"':'"')+' data-locIdx="'+locIdxVal+'" data-repeat="'+repeatVal+'" data-slideDelay="'+slideDelayVal+'"' + `data-slideOrder='${slideOrderVal}'>` + ((locIdxVal == 0) ? maincitycoords.displayname : locList[locIdxVal-1].displayname)+ '</span>',
 				"radar":'<span class="city radar" data-slide="radar" data-divOrder="'+slideVal+ ((loopComplete == true) ? '" data-loopComplete="true"':'"')+' data-locIdx="'+locIdxVal+'" data-repeat="'+repeatVal+'" data-slideDelay="'+slideDelayVal+'"' + `data-slideOrder='${slideOrderVal}'>LOCAL RADAR</span>`,
-				"golf":'<span class="city golf" data-slide="golf" data-divOrder="'+slideVal+ ((loopComplete == true) ? '" data-loopComplete="true"':'"')+' data-locIdx="'+locIdxVal+'" data-repeat="'+repeatVal+'" data-slideDelay="'+slideDelayVal+'"' + `data-slideOrder='${slideOrderVal}'>GOLF</span>`,
+				"golf":'<span class="city golff" data-slide="golf" data-divOrder="'+slideVal+ ((loopComplete == true) ? '" data-loopComplete="true"':'"')+' data-locIdx="'+locIdxVal+'" data-repeat="'+repeatVal+'" data-slideDelay="'+slideDelayVal+'"' + `data-slideOrder='${slideOrderVal}'>GOLF</span>`,
 				"beach":'<span class="city beach" data-slide="beach" data-divOrder="'+slideVal+ ((loopComplete == true) ? '" data-loopComplete="true"':'"')+' data-locIdx="'+locIdxVal+'" data-repeat="'+repeatVal+'" data-slideDelay="'+slideDelayVal+'"' + `data-slideOrder='${slideOrderVal}'>BOAT & BEACH</span>`,
 				"health":'<span class="city healthh" data-slide="healthh" data-divOrder="'+slideVal+ ((loopComplete == true) ? '" data-loopComplete="true"':'"')+' data-locIdx="'+locIdxVal+'" data-repeat="'+repeatVal+'" data-slideDelay="'+slideDelayVal+'"' + `data-slideOrder='${slideOrderVal}'>HEALTH</span>`,
 				"airport":'<span class="city airport" data-slide="airport" data-divOrder="'+slideVal+ ((loopComplete == true) ? '" data-loopComplete="true"':'"')+' data-locIdx="'+locIdxVal+'" data-repeat="'+repeatVal+'" data-slideDelay="'+slideDelayVal+'"' + `data-slideOrder='${slideOrderVal}'>AIRPORTS</span>`,
 				"travel":'<span class="city travell" data-slide="travell" data-divOrder="'+slideVal+ ((loopComplete == true) ? '" data-loopComplete="true"':'"')+' data-locIdx="'+locIdxVal+'" data-repeat="'+repeatVal+'" data-slideDelay="'+slideDelayVal+'"' + `data-slideOrder='${slideOrderVal}'>TRAVEL</span>`,
 				"international":'<span class="city internationall" data-slide="internationall" data-divOrder="'+slideVal+ ((loopComplete == true) ? '" data-loopComplete="true"':'"')+' data-locIdx="'+locIdxVal+'" data-repeat="'+repeatVal+'" data-slideDelay="'+slideDelayVal+'"' + `data-slideOrder='${slideOrderVal}'>INTERNATIONAL</span>`,
+				"garden":'<span class="city gardenn" data-slide="garden" data-divOrder="' +slideVal +(loopComplete == true ? '" data-loopComplete="true"' : '"') +' data-locIdx="' +locIdxVal +'" data-repeat="' +repeatVal +'" data-slideDelay="' +slideDelayVal +'"' +`data-slideOrder='${slideOrderVal}'>GARDEN</span>`,
 			}
 			return divType[divTypeVal];
 		}
